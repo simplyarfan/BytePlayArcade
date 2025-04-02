@@ -1,3 +1,4 @@
+<!-- memory-game.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,6 @@
       max-width: 900px;
       margin: 2em auto;
     }
-
     .memory-grid {
       display: grid;
       grid-template-columns: repeat(8, 80px);
@@ -17,7 +17,6 @@
       justify-content: center;
       gap: 10px;
     }
-
     .card {
       width: 80px;
       height: 80px;
@@ -32,25 +31,10 @@
       user-select: none;
       transition: transform 0.2s;
     }
-
-    .card:hover {
-      transform: scale(1.05);
-    }
-
-    .card.matched {
-      background-color: #00b894;
-    }
-
-    .card.revealed {
-      background-color: #333;
-    }
-
-    .status {
-      margin-top: 1em;
-      font-weight: bold;
-      text-align: center;
-    }
-
+    .card:hover { transform: scale(1.05); }
+    .card.matched { background-color: #00b894; }
+    .card.revealed { background-color: #333; }
+    .status { margin-top: 1em; font-weight: bold; text-align: center; }
     .restart {
       margin-top: 1.5em;
       padding: 0.6em 1.8em;
@@ -63,10 +47,7 @@
       margin-left: auto;
       margin-right: auto;
     }
-
-    .restart:hover {
-      background-color: #005fa3;
-    }
+    .restart:hover { background-color: #005fa3; }
   </style>
 </head>
 <body>
@@ -80,26 +61,13 @@
     <a href="index.html" class="info-link">🔙 Back to Home</a>
   </div>
 
-  <!-- SOUND FILES -->
   <audio id="flipSound" src="flip.mp3" preload="auto"></audio>
   <audio id="matchSound" src="match.mp3" preload="auto"></audio>
   <audio id="winSound" src="win.mp3" preload="auto"></audio>
 
   <script>
-    const cards = [
-      '👾','👾','💾','💾','🕹️','🕹️','🎮','🎮',
-      '🧠','🧠','🎲','🎲','🎧','🎧','💡','💡',
-      '🚀','🚀','📀','📀','🧃','🧃','📦','📦',
-      '📱','📱','🧩','🧩','🎯','🎯','🪐','🪐'
-    ];
-
-    let firstCard = null;
-    let secondCard = null;
-    let score = 0;
-    let lockBoard = false;
-    let matchedCount = 0;
-    let time = 0;
-    let timerInterval;
+    const cards = ['👾','👾','💾','💾','🕹️','🕹️','🎮','🎮','🧠','🧠','🎲','🎲','🎧','🎧','💡','💡','🚀','🚀','📀','📀','🧃','🧃','📦','📦','📱','📱','🧩','🧩','🎯','🎯','🪐','🪐'];
+    let firstCard = null, secondCard = null, score = 0, lockBoard = false, matchedCount = 0, time = 0, timerInterval;
 
     const flipSound = document.getElementById('flipSound');
     const matchSound = document.getElementById('matchSound');
@@ -123,19 +91,14 @@
     }
 
     function startMemoryGame() {
-      score = 0;
-      matchedCount = 0;
-      firstCard = null;
-      secondCard = null;
-      lockBoard = false;
+      score = 0; matchedCount = 0;
+      firstCard = null; secondCard = null; lockBoard = false;
       document.getElementById('status').textContent = "Score: 0";
       document.getElementById('timer').textContent = "Time: 0s";
       startTimer();
-
       const shuffled = shuffle([...cards]);
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
-
       shuffled.forEach((value, index) => {
         const card = document.createElement('div');
         card.classList.add('card');
@@ -149,9 +112,7 @@
 
     function handleCardClick(e) {
       const card = e.target;
-
       if (lockBoard || card.classList.contains('matched') || card === firstCard) return;
-
       card.classList.add('revealed');
       card.textContent = card.dataset.value;
       flipSound.play();
@@ -176,10 +137,10 @@
         if (matchedCount === cards.length) {
           winSound.play();
           clearInterval(timerInterval);
-          setTimeout(() => {
-            alert(`🎉 You matched all pairs!\nFinal Score: ${score}\nTime: ${time}s`);
-            startMemoryGame();
-          }, 500);
+          localStorage.setItem("score", score);
+          localStorage.setItem("time", time);
+          localStorage.setItem("lastGame", "memory");
+          setTimeout(() => window.location.href = "results.html", 1000);
         }
       } else {
         setTimeout(() => {
