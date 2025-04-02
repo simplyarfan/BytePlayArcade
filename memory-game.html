@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Match | BytePlay Arcade</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .memory-container {
+      max-width: 600px;
+      margin: 2em auto;
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 100px);
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100px;
+      height: 100px;
+      background-color: #0078D7;
+      color: white;
+      font-size: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 8px;
+      user-select: none;
+    }
+
+    .card.matched {
+      background-color: #00b894;
+    }
+
+    .card.revealed {
+      background-color: #333;
+    }
+
+    .status {
+      margin-top: 1em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .restart {
+      margin-top: 1em;
+      padding: 0.5em 1.5em;
+      background-color: #0078D7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .restart:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container memory-container">
+    <h1>Memory Match: Binary Edition</h1>
+    <div class="memory-grid" id="grid"></div>
+    <div class="status" id="status">Score: 0</div>
+    <button class="restart" onclick="startMemoryGame()">Restart</button>
+    <br><br>
+    <a href="index.html" class="info-link">🔙 Back to Home</a>
+  </div>
+
+  <script>
+    const cards = ['0', '0', '1', '1', '10', '10', '11', '11']; // 4 pairs
+    let firstCard = null;
+    let secondCard = null;
+    let score = 0;
+    let lockBoard = false;
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function startMemoryGame() {
+      score = 0;
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+      document.getElementById('status').textContent = "Score: 0";
+
+      const shuffled = shuffle([...cards]);
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+
+      shuffled.forEach((value, index) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.value = value;
+        card.dataset.index = index;
+        card.addEventListener('click', handleCardClick);
+        grid.appendChild(card);
+      });
+    }
+
+    function handleCardClick(e) {
+      const card = e.target;
+
+      if (lockBoard || card.classList.contains('matched') || card === firstCard) return;
+
+      card.classList.add('revealed');
+      card.textContent = card.dataset.value;
+
+      if (!firstCard) {
+        firstCard = card;
+        return;
+      }
+
+      secondCard = card;
+      lockBoard = true;
+
+      if (firstCard.dataset.value === secondCard.dataset.value) {
+        firstCard.classList.add('matched');
+        secondCard.classList.add('matched');
+        score += 10;
+        document.getElementById('status').textContent = `Score: ${score}`;
+        resetTurn();
+      } else {
+        setTimeout(() => {
+          firstCard.classList.remove('revealed');
+          secondCard.classList.remove('revealed');
+          firstCard.textContent = '';
+          secondCard.textContent = '';
+          resetTurn();
+        }, 1000);
+      }
+    }
+
+    function resetTurn() {
+      [firstCard, secondCard] = [null, null];
+      lockBoard = false;
+    }
+
+    window.onload = startMemoryGame;
+  </script>
+</body>
+</html>
