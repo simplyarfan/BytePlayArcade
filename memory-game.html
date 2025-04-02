@@ -74,10 +74,16 @@
     <h1>🧠 Memory Match: Emoji Edition</h1>
     <div class="memory-grid" id="grid"></div>
     <div class="status" id="status">Score: 0</div>
+    <div class="status" id="timer">Time: 0s</div>
     <button class="restart" onclick="startMemoryGame()">Restart</button>
     <br><br>
     <a href="index.html" class="info-link">🔙 Back to Home</a>
   </div>
+
+  <!-- SOUND FILES -->
+  <audio id="flipSound" src="flip.mp3" preload="auto"></audio>
+  <audio id="matchSound" src="match.mp3" preload="auto"></audio>
+  <audio id="winSound" src="win.mp3" preload="auto"></audio>
 
   <script>
     const cards = [
@@ -92,6 +98,12 @@
     let score = 0;
     let lockBoard = false;
     let matchedCount = 0;
+    let time = 0;
+    let timerInterval;
+
+    const flipSound = document.getElementById('flipSound');
+    const matchSound = document.getElementById('matchSound');
+    const winSound = document.getElementById('winSound');
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -101,6 +113,15 @@
       return array;
     }
 
+    function startTimer() {
+      time = 0;
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        time++;
+        document.getElementById('timer').textContent = `Time: ${time}s`;
+      }, 1000);
+    }
+
     function startMemoryGame() {
       score = 0;
       matchedCount = 0;
@@ -108,6 +129,8 @@
       secondCard = null;
       lockBoard = false;
       document.getElementById('status').textContent = "Score: 0";
+      document.getElementById('timer').textContent = "Time: 0s";
+      startTimer();
 
       const shuffled = shuffle([...cards]);
       const grid = document.getElementById('grid');
@@ -131,6 +154,7 @@
 
       card.classList.add('revealed');
       card.textContent = card.dataset.value;
+      flipSound.play();
 
       if (!firstCard) {
         firstCard = card;
@@ -145,11 +169,17 @@
         secondCard.classList.add('matched');
         score += 10;
         matchedCount += 2;
+        matchSound.play();
         document.getElementById('status').textContent = `Score: ${score}`;
         resetTurn();
 
         if (matchedCount === cards.length) {
-          document.getElementById('status').textContent = `🎉 You matched all pairs! Final Score: ${score}`;
+          winSound.play();
+          clearInterval(timerInterval);
+          setTimeout(() => {
+            alert(`🎉 You matched all pairs!\nFinal Score: ${score}\nTime: ${time}s`);
+            startMemoryGame();
+          }, 500);
         }
       } else {
         setTimeout(() => {
