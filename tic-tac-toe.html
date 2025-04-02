@@ -70,10 +70,7 @@
       text-decoration: underline;
     }
 
-    /* Animations */
-    .fade-in {
-      animation: fadeIn 1s ease;
-    }
+    .fade-in { animation: fadeIn 1s ease; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -100,7 +97,7 @@
     <a href="index.html" class="info-link">🔙 Back to Home</a>
   </div>
 
-  <!-- Sound Effects -->
+  <!-- Sounds -->
   <audio id="placeSound" src="place.mp3" preload="auto"></audio>
   <audio id="winSound" src="win.mp3" preload="auto"></audio>
 
@@ -134,16 +131,23 @@
       cell.textContent = currentPlayer;
       cell.classList.add('bounce');
       placeSound.play();
-
       setTimeout(() => cell.classList.remove('bounce'), 400);
 
       if (checkWinner()) {
         document.getElementById('status').textContent = `Player ${currentPlayer} wins! 🎉`;
         winSound.play();
         gameActive = false;
+        localStorage.setItem("score", `Winner: Player ${currentPlayer}`);
+        localStorage.setItem("time", "--");
+        localStorage.setItem("lastGame", "tic");
+        setTimeout(() => window.location.href = "results.html", 1000);
       } else if (!board.includes('')) {
         document.getElementById('status').textContent = `It's a draw! 🤖`;
         gameActive = false;
+        localStorage.setItem("score", "Draw");
+        localStorage.setItem("time", "--");
+        localStorage.setItem("lastGame", "tic");
+        setTimeout(() => window.location.href = "results.html", 1000);
       } else {
         currentPlayer = currentPlayer === '1' ? '0' : '1';
         document.getElementById('status').textContent = `Player ${currentPlayer}'s turn (${currentPlayer})`;
