@@ -2,9 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tic Tac Toe | BytePlay Arcade</title>
+  <title>Binary Tic Tac Toe | BytePlay Arcade</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .container {
+      margin-top: 5em;
+      animation: fadeIn 1s ease;
+    }
+
+    h1 {
+      color: #0078D7;
+    }
+
     .board {
       display: grid;
       grid-template-columns: repeat(3, 100px);
@@ -23,6 +40,7 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
+      transition: background-color 0.2s ease;
     }
 
     .status {
@@ -44,23 +62,56 @@
     .restart:hover {
       background-color: #005fa3;
     }
+
+    .info-link {
+      display: block;
+      margin-top: 2em;
+      color: #444;
+      text-decoration: underline;
+    }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bounce {
+      animation: bounce 0.4s ease;
+    }
+
+    @keyframes bounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Tic Tac Toe</h1>
+  <div class="container fade-in">
+    <h1>Binary Tic Tac Toe</h1>
     <div class="board" id="board"></div>
-    <div class="status" id="status">Player X's turn</div>
+    <div class="status" id="status">Player 1's turn (1)</div>
     <button class="restart" onclick="startGame()">Restart Game</button>
-    <br><br>
     <a href="index.html" class="info-link">🔙 Back to Home</a>
   </div>
 
+  <!-- Sound Effects -->
+  <audio id="placeSound" src="place.mp3" preload="auto"></audio>
+  <audio id="winSound" src="win.mp3" preload="auto"></audio>
+
   <script>
     let board = [];
-    let currentPlayer = '1'; // Start with player 1 (binary style)
+    let currentPlayer = '1';
     let gameActive = true;
-    
+
+    const placeSound = document.getElementById('placeSound');
+    const winSound = document.getElementById('winSound');
+
     function startGame() {
       board = ['', '', '', '', '', '', '', '', ''];
       currentPlayer = '1';
@@ -75,13 +126,20 @@
         boardEl.appendChild(cell);
       });
     }
-    
+
     function handleMove(i) {
       if (!gameActive || board[i]) return;
       board[i] = currentPlayer;
-      document.getElementsByClassName('cell')[i].textContent = currentPlayer;
+      const cell = document.getElementsByClassName('cell')[i];
+      cell.textContent = currentPlayer;
+      cell.classList.add('bounce');
+      placeSound.play();
+
+      setTimeout(() => cell.classList.remove('bounce'), 400);
+
       if (checkWinner()) {
         document.getElementById('status').textContent = `Player ${currentPlayer} wins! 🎉`;
+        winSound.play();
         gameActive = false;
       } else if (!board.includes('')) {
         document.getElementById('status').textContent = `It's a draw! 🤖`;
@@ -91,19 +149,18 @@
         document.getElementById('status').textContent = `Player ${currentPlayer}'s turn (${currentPlayer})`;
       }
     }
-    
+
     function checkWinner() {
       const winPatterns = [
-        [0,1,2],[3,4,5],[6,7,8], // Rows
-        [0,3,6],[1,4,7],[2,5,8], // Columns
-        [0,4,8],[2,4,6]          // Diagonals
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
       ];
       return winPatterns.some(([a, b, c]) =>
         board[a] && board[a] === board[b] && board[a] === board[c]
       );
     }
 
-    // Start game on load
     window.onload = startGame;
   </script>
 </body>
