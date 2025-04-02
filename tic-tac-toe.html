@@ -58,14 +58,14 @@
 
   <script>
     let board = [];
-    let currentPlayer = 'X';
+    let currentPlayer = '1'; // Start with player 1 (binary style)
     let gameActive = true;
-
+    
     function startGame() {
       board = ['', '', '', '', '', '', '', '', ''];
-      currentPlayer = 'X';
+      currentPlayer = '1';
       gameActive = true;
-      document.getElementById('status').textContent = "Player X's turn";
+      document.getElementById('status').textContent = "Player 1's turn (1)";
       const boardEl = document.getElementById('board');
       boardEl.innerHTML = '';
       board.forEach((_, i) => {
@@ -75,23 +75,23 @@
         boardEl.appendChild(cell);
       });
     }
-
+    
     function handleMove(i) {
       if (!gameActive || board[i]) return;
       board[i] = currentPlayer;
       document.getElementsByClassName('cell')[i].textContent = currentPlayer;
       if (checkWinner()) {
-        document.getElementById('status').textContent = `Player ${currentPlayer} wins!`;
+        document.getElementById('status').textContent = `Player ${currentPlayer} wins! 🎉`;
         gameActive = false;
       } else if (!board.includes('')) {
-        document.getElementById('status').textContent = `It's a draw!`;
+        document.getElementById('status').textContent = `It's a draw! 🤖`;
         gameActive = false;
       } else {
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        document.getElementById('status').textContent = `Player ${currentPlayer}'s turn`;
+        currentPlayer = currentPlayer === '1' ? '0' : '1';
+        document.getElementById('status').textContent = `Player ${currentPlayer}'s turn (${currentPlayer})`;
       }
     }
-
+    
     function checkWinner() {
       const winPatterns = [
         [0,1,2],[3,4,5],[6,7,8], // Rows
