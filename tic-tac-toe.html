@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Binary Tic Tac Toe | BytePlay Arcade</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .container {
+      margin-top: 5em;
+      animation: fadeIn 1s ease;
+    }
+
+    h1 {
+      color: #0078D7;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 10px;
+      justify-content: center;
+      margin: 2em auto;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      background-color: #ffffff;
+      border: 2px solid #0078D7;
+      font-size: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .status {
+      margin-top: 1em;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .restart {
+      margin-top: 1em;
+      padding: 0.5em 1em;
+      background-color: #0078D7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .restart:hover {
+      background-color: #005fa3;
+    }
+
+    .info-link {
+      display: block;
+      margin-top: 2em;
+      color: #444;
+      text-decoration: underline;
+    }
+
+    .fade-in { animation: fadeIn 1s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bounce {
+      animation: bounce 0.4s ease;
+    }
+
+    @keyframes bounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container fade-in">
+    <h1>Binary Tic Tac Toe</h1>
+    <div class="board" id="board"></div>
+    <div class="status" id="status">Player 1's turn (1)</div>
+    <button class="restart" onclick="startGame()">Restart Game</button>
+    <a href="index.html" class="info-link">🔙 Back to Home</a>
+  </div>
+
+  <!-- Sounds -->
+  <audio id="placeSound" src="place.mp3" preload="auto"></audio>
+  <audio id="winSound" src="win.mp3" preload="auto"></audio>
+
+  <script>
+    let board = [];
+    let currentPlayer = '1';
+    let gameActive = true;
+
+    const placeSound = document.getElementById('placeSound');
+    const winSound = document.getElementById('winSound');
+
+    function startGame() {
+      board = ['', '', '', '', '', '', '', '', ''];
+      currentPlayer = '1';
+      gameActive = true;
+      document.getElementById('status').textContent = "Player 1's turn (1)";
+      const boardEl = document.getElementById('board');
+      boardEl.innerHTML = '';
+      board.forEach((_, i) => {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.addEventListener('click', () => handleMove(i));
+        boardEl.appendChild(cell);
+      });
+    }
+
+    function handleMove(i) {
+      if (!gameActive || board[i]) return;
+      board[i] = currentPlayer;
+      const cell = document.getElementsByClassName('cell')[i];
+      cell.textContent = currentPlayer;
+      cell.classList.add('bounce');
+      placeSound.play();
+      setTimeout(() => cell.classList.remove('bounce'), 400);
+
+      if (checkWinner()) {
+        document.getElementById('status').textContent = `Player ${currentPlayer} wins! 🎉`;
+        winSound.play();
+        gameActive = false;
+        localStorage.setItem("score", `Winner: Player ${currentPlayer}`);
+        localStorage.setItem("time", "--");
+        localStorage.setItem("lastGame", "tic");
+        setTimeout(() => window.location.href = "results.html", 1000);
+      } else if (!board.includes('')) {
+        document.getElementById('status').textContent = `It's a draw! 🤖`;
+        gameActive = false;
+        localStorage.setItem("score", "Draw");
+        localStorage.setItem("time", "--");
+        localStorage.setItem("lastGame", "tic");
+        setTimeout(() => window.location.href = "results.html", 1000);
+      } else {
+        currentPlayer = currentPlayer === '1' ? '0' : '1';
+        document.getElementById('status').textContent = `Player ${currentPlayer}'s turn (${currentPlayer})`;
+      }
+    }
+
+    function checkWinner() {
+      const winPatterns = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+      ];
+      return winPatterns.some(([a, b, c]) =>
+        board[a] && board[a] === board[b] && board[a] === board[c]
+      );
+    }
+
+    window.onload = startGame;
+  </script>
+</body>
+</html>

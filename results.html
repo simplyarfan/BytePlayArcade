@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Results | BytePlay Arcade</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .results-container {
+      max-width: 700px;
+      margin: 5em auto;
+      background-color: #fff;
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      animation: fadeIn 1s ease;
+    }
+
+    h1 {
+      color: #0078D7;
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 2em;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5em;
+    }
+
+    .button-row a {
+      padding: 0.8em 1.8em;
+      background-color: #0078D7;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .button-row a:hover {
+      background-color: #005fa3;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="results-container">
+    <h1>🎉 Game Over!</h1>
+    <p>Your final score: <strong id="score">--</strong></p>
+    <p>Your time: <strong id="time">--</strong></p>
+
+    <div class="button-row">
+      <a id="replayBtn" href="#">🔁 Replay Game</a>
+      <a href="index.html">🏠 Home</a>
+      <a id="switchGameBtn" href="#">🎮 Play Another Game</a>
+    </div>
+  </div>
+
+  <script>
+    // Example values (pass via URL or localStorage)
+    const score = localStorage.getItem("score") || "--";
+    const time = localStorage.getItem("time") || "--";
+
+    document.getElementById("score").textContent = score;
+    document.getElementById("time").textContent = time;
+
+    // Adjust buttons based on where player came from
+    const lastGame = localStorage.getItem("lastGame"); // "tic" or "memory"
+    const replayBtn = document.getElementById("replayBtn");
+    const switchGameBtn = document.getElementById("switchGameBtn");
+
+    if (lastGame === "tic") {
+      replayBtn.href = "tic-tac-toe.html";
+      switchGameBtn.href = "memory-game.html";
+    } else if (lastGame === "memory") {
+      replayBtn.href = "memory-game.html";
+      switchGameBtn.href = "tic-tac-toe.html";
+    } else {
+      // default
+      replayBtn.href = "index.html";
+      switchGameBtn.href = "index.html";
+    }
+  </script>
+</body>
+</html>
