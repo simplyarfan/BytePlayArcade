@@ -221,22 +221,22 @@
 
     let playerIndex = localStorage.getItem("playerIndex") || 0;
 
-  function saveScoreToLeaderboard(flips, time) {
-    const playerName = `Player ${playerIndex}`;
-    const newScore = { name: playerName, flips: flips, time: time };
-
-    let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-    leaderboard.push(newScore);
-
-    // Sort by time, then flips
-    leaderboard.sort((a, b) => a.time - b.time || a.flips - b.flips);
-    leaderboard = leaderboard.slice(0, 5); // Keep top 5
-
-    localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-
-    playerIndex++;
-    localStorage.setItem("playerIndex", playerIndex);
-  }
+    function saveScoreToLeaderboard(flips, time) {
+      const playerName = `Player ${playerIndex}`;
+      const newScore = { name: playerName, flips: flips, time: time };
+  
+      let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+      leaderboard.push(newScore);
+  
+      // Sort by time, then flips
+      leaderboard.sort((a, b) => a.time - b.time || a.flips - b.flips);
+      leaderboard = leaderboard.slice(0, 5); // Keep top 5
+  
+      localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+  
+      playerIndex++;
+      localStorage.setItem("playerIndex", playerIndex);
+    }
 
     window.onload = startMemoryGame;
   </script>
