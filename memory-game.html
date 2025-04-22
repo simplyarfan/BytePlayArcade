@@ -187,18 +187,23 @@
         document.getElementById('status').textContent = `Score: ${score}`;
         resetTurn();
 
-        if (matchedCount === cards.length) {
+      if (matchedCount === cards.length) {
           winSound.play();
           clearInterval(timerInterval);
           localStorage.setItem("score", score);
           localStorage.setItem("time", time);
           localStorage.setItem("lastGame", "memory");
-
+          
+          // 👇 NEW LINE: calculate flips from score (optional) or track separately
+          const flips = score === 0 ? 0 : (cards.length * 5 - score) / 10;
+          saveScoreToLeaderboard(flips, time);  // ✅ add this
+          
           setTimeout(() => {
             window.location.href = "results.html";
           }, 1000);
-        }
-      } else {
+      }
+        
+      else {
         setTimeout(() => {
           firstCard.classList.remove('revealed');
           secondCard.classList.remove('revealed');
