@@ -40,3 +40,26 @@ h1 {
   color: #444;
   text-decoration: underline;
 }
+
+.leaderboard {
+  margin: 20px auto;
+  text-align: center;
+  background: #222;
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+}
+
+.leaderboard table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.leaderboard th, .leaderboard td {
+  border: 1px solid #555;
+  padding: 10px;
+}
+
