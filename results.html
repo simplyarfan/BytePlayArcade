@@ -1,126 +1,81 @@
+<!-- results.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Game Results | BytePlay Arcade</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 0;
       text-align: center;
+      background-color: #f4f6f9;
     }
-
-    .results-container {
-      max-width: 700px;
-      margin: 5em auto;
-      background-color: #fff;
-      padding: 2em;
+    .leaderboard {
+      margin: 2em auto;
+      padding: 1em;
+      background-color: #1c1c1c;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      animation: fadeIn 1s ease;
+      color: white;
+      max-width: 500px;
     }
-
-    h1 {
-      color: #0078D7;
-      margin-bottom: 0.5em;
+    table {
+      width: 100%;
+      border-collapse: collapse;
     }
-
-    p {
-      font-size: 1.2em;
-      margin-bottom: 2em;
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
     }
-
-    .button-row {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1.5em;
+    th {
+      background-color: #333;
     }
-
-    .button-row a {
-      padding: 0.8em 1.8em;
+    button, a.button-link {
+      margin: 1em;
+      padding: 0.5em 1.5em;
       background-color: #0078D7;
       color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
       text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-      transition: background 0.2s;
-    }
-
-    .button-row a:hover {
-      background-color: #005fa3;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      display: inline-block;
     }
   </style>
 </head>
 <body>
-  <div class="results-container">
-    <h1>🎉 Game Over!</h1>
-    <p>Your final score: <strong id="score">--</strong></p>
-    <p>Your time: <strong id="time">--</strong></p>
+  <h1>🎉 Game Over!</h1>
+  <p>Your final score: <strong id="scoreDisplay">0</strong></p>
+  <p>Your time: <strong id="timeDisplay">0</strong></p>
 
-    <div class="leaderboard">
-  <h2>🏆 Leaderboard</h2>
-  <table id="leaderboardTable">
-    <thead>
-      <tr><th>Player</th><th>Time (s)</th><th>Flips</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-
-    <div class="button-row">
-      <a id="replayBtn" href="#">🔁 Replay Game</a>
-      <a href="index.html">🏠 Home</a>
-      <a id="switchGameBtn" href="#">🎮 Play Another Game</a>
-    </div>
+  <div class="leaderboard">
+    <h2>🏆 Leaderboard</h2>
+    <table>
+      <thead>
+        <tr><th>Player</th><th>Time (s)</th><th>Flips</th></tr>
+      </thead>
+      <tbody id="leaderboardBody"></tbody>
+    </table>
   </div>
 
+  <a href="memory-game.html" class="button-link">🔄 Replay Game</a>
+  <a href="index.html" class="button-link">🏠 Home</a>
+  <a href="games.html" class="button-link">🎮 Play Another Game</a>
+
   <script>
-    // Example values (pass via URL or localStorage)
-    const score = localStorage.getItem("score") || "--";
-    const time = localStorage.getItem("time") || "--";
-
-    document.getElementById("score").textContent = score;
-    document.getElementById("time").textContent = time;
-
-    // Adjust buttons based on where player came from
-    const lastGame = localStorage.getItem("lastGame"); // "tic" or "memory"
-    const replayBtn = document.getElementById("replayBtn");
-    const switchGameBtn = document.getElementById("switchGameBtn");
-
-    if (lastGame === "tic") {
-      replayBtn.href = "tic-tac-toe.html";
-      switchGameBtn.href = "memory-game.html";
-    } else if (lastGame === "memory") {
-      replayBtn.href = "memory-game.html";
-      switchGameBtn.href = "tic-tac-toe.html";
-    } else {
-      // default
-      replayBtn.href = "index.html";
-      switchGameBtn.href = "index.html";
-    }
-
-    function loadLeaderboard() {
     const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-    const tbody = document.querySelector("#leaderboardTable tbody");
-    tbody.innerHTML = "";
+    const score = localStorage.getItem("score") || 0;
+    const time = localStorage.getItem("time") || 0;
 
-    leaderboard.forEach(score => {
+    document.getElementById("scoreDisplay").textContent = score;
+    document.getElementById("timeDisplay").textContent = time;
+
+    const tbody = document.getElementById("leaderboardBody");
+    leaderboard.forEach(entry => {
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${score.name}</td><td>${score.time}</td><td>${score.flips}</td>`;
+      row.innerHTML = `<td>${entry.name}</td><td>${entry.time}</td><td>${entry.flips}</td>`;
       tbody.appendChild(row);
     });
-  }
-
-    window.onload = loadLeaderboard;
   </script>
 </body>
 </html>
