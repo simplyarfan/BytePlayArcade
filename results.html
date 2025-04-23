@@ -63,26 +63,30 @@
   <a href="games.html" class="button-link">🎮 Play Another Game</a>
 
   <script>
-    const score = localStorage.getItem("score") || 0;
-    const time = localStorage.getItem("time") || 0;
-    const lastGame = localStorage.getItem("lastGame");
+    window.onload = function () {
+      const score = localStorage.getItem("score") || 0;
+      const time = localStorage.getItem("time") || 0;
+      const lastGame = localStorage.getItem("lastGame");
   
-    document.getElementById("scoreDisplay").textContent = score;
-    document.getElementById("timeDisplay").textContent = time;
+      document.getElementById("scoreDisplay").textContent = score;
+      document.getElementById("timeDisplay").textContent = time;
   
-    if (lastGame === "memory") {
-      const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-      const tbody = document.getElementById("leaderboardBody");
+      if (lastGame === "memory") {
+        const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+        const tbody = document.getElementById("leaderboardBody");
   
-      leaderboard.forEach(entry => {
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${entry.name}</td><td>${entry.time}</td><td>${entry.flips}</td>`;
-        tbody.appendChild(row);
-      });
-    } else {
-      // Hide leaderboard container if not memory game
-      document.querySelector(".leaderboard").style.display = "none";
-    }
+        leaderboard.forEach(entry => {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${entry.name}</td><td>${entry.time}</td><td>${entry.flips}</td>`;
+          tbody.appendChild(row);
+        });
+      } else {
+        const leaderboardContainer = document.querySelector(".leaderboard");
+        if (leaderboardContainer) {
+          leaderboardContainer.style.display = "none";
+        }
+      }
+    };
 </script>
 </body>
 </html>
