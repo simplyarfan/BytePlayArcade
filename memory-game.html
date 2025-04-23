@@ -1,74 +1,10 @@
+<!-- memory-game.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Memory Match | BytePlay Arcade</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    .memory-container {
-      max-width: 900px;
-      margin: 2em auto;
-      animation: fadeIn 1s ease;
-    }
-    .memory-grid {
-      display: grid;
-      grid-template-columns: repeat(8, 80px);
-      grid-template-rows: repeat(4, 80px);
-      justify-content: center;
-      gap: 10px;
-    }
-    .card {
-      width: 80px;
-      height: 80px;
-      background-color: #0078D7;
-      color: white;
-      font-size: 1.8em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 8px;
-      user-select: none;
-      transition: transform 0.2s;
-    }
-    .card:hover {
-      transform: scale(1.05);
-    }
-    .card.matched {
-      background-color: #00b894;
-    }
-    .card.revealed {
-      background-color: #333;
-    }
-    .status {
-      margin-top: 1em;
-      font-weight: bold;
-      text-align: center;
-    }
-    .restart {
-      margin-top: 1.5em;
-      padding: 0.6em 1.8em;
-      background-color: #0078D7;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .restart:hover {
-      background-color: #005fa3;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
 </head>
 <body>
   <div class="container memory-container">
@@ -81,17 +17,16 @@
     <a href="index.html" class="info-link">🔙 Back to Home</a>
   </div>
 
-  <!-- SOUND FILES -->
   <audio id="flipSound" src="flip.mp3" preload="auto"></audio>
   <audio id="matchSound" src="match.mp3" preload="auto"></audio>
   <audio id="winSound" src="win.mp3" preload="auto"></audio>
 
   <script>
     const cards = [
-      '👾','👾','💾','💾','🕹️','🕹️','🎮','🎮',
+      '👾','👾','📂','📂','🕹️','🕹️','🎮','🎮',
       '🧠','🧠','🎲','🎲','🎧','🎧','💡','💡',
       '🚀','🚀','📀','📀','🧃','🧃','📦','📦',
-      '📱','📱','🧩','🧩','🎯','🎯','🪐','🪐'
+      '📱','📱','🧹','🧹','🎯','🎯','🪐','🪐'
     ];
 
     let firstCard = null;
@@ -101,6 +36,7 @@
     let matchedCount = 0;
     let time = 0;
     let timerInterval;
+    let flipCount = 0;
 
     const flipSound = document.getElementById('flipSound');
     const matchSound = document.getElementById('matchSound');
@@ -125,6 +61,7 @@
 
     function startMemoryGame() {
       score = 0;
+      flipCount = 0;
       matchedCount = 0;
       firstCard = null;
       secondCard = null;
@@ -150,9 +87,9 @@
 
     function handleCardClick(e) {
       const card = e.target;
-
       if (lockBoard || card.classList.contains('matched') || card === firstCard) return;
 
+      flipCount++;
       card.classList.add('revealed');
       card.textContent = card.dataset.value;
       flipSound.play();
@@ -177,14 +114,7 @@
         if (matchedCount === cards.length) {
           winSound.play();
           clearInterval(timerInterval);
-
-          localStorage.setItem("score", score);
-          localStorage.setItem("time", time);
-          localStorage.setItem("lastGame", "memory");
-
-          const flips = score === 0 ? 0 : (cards.length * 5 - score) / 10;
-          saveScoreToLeaderboard(flips, time);
-
+          saveScoreToLeaderboard(flipCount, time);
           setTimeout(() => {
             window.location.href = "results.html";
           }, 1000);
@@ -210,15 +140,11 @@
     function saveScoreToLeaderboard(flips, time) {
       const playerName = `Player ${playerIndex}`;
       const newScore = { name: playerName, flips: flips, time: time };
-
       let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
       leaderboard.push(newScore);
-
       leaderboard.sort((a, b) => a.time - b.time || a.flips - b.flips);
-      leaderboard = leaderboard.slice(0, 5); // Top 5
-
+      leaderboard = leaderboard.slice(0, 5);
       localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-
       playerIndex++;
       localStorage.setItem("playerIndex", playerIndex);
     }
