@@ -23,20 +23,20 @@
 
   <script>
     const cards = [
-      '👾','👾','📂','📂','🕹️','🕹️','🎮','🎮',
+      '👾','👾','💾','💾','🕹️','🕹️','🎮','🎮',
       '🧠','🧠','🎲','🎲','🎧','🎧','💡','💡',
       '🚀','🚀','📀','📀','🧃','🧃','📦','📦',
-      '📱','📱','🧹','🧹','🎯','🎯','🪐','🪐'
+      '📱','📱','🧩','🧩','🎯','🎯','🪐','🪐'
     ];
 
     let firstCard = null;
     let secondCard = null;
     let score = 0;
+    let flipCount = 0;
     let lockBoard = false;
     let matchedCount = 0;
     let time = 0;
     let timerInterval;
-    let flipCount = 0;
 
     const flipSound = document.getElementById('flipSound');
     const matchSound = document.getElementById('matchSound');
@@ -87,6 +87,7 @@
 
     function handleCardClick(e) {
       const card = e.target;
+
       if (lockBoard || card.classList.contains('matched') || card === firstCard) return;
 
       flipCount++;
@@ -135,16 +136,22 @@
       lockBoard = false;
     }
 
-    let playerIndex = parseInt(localStorage.getItem("playerIndex")) || 0;
+    let playerIndex = localStorage.getItem("playerIndex") || 0;
 
     function saveScoreToLeaderboard(flips, time) {
       const playerName = `Player ${playerIndex}`;
       const newScore = { name: playerName, flips: flips, time: time };
+
       let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
       leaderboard.push(newScore);
       leaderboard.sort((a, b) => a.time - b.time || a.flips - b.flips);
       leaderboard = leaderboard.slice(0, 5);
+
       localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+      localStorage.setItem("score", score);
+      localStorage.setItem("time", time);
+      localStorage.setItem("lastGame", "memory");
+
       playerIndex++;
       localStorage.setItem("playerIndex", playerIndex);
     }
