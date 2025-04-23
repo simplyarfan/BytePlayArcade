@@ -1,79 +1,76 @@
-/* === Base Styles === */
-body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background-color: #f4f6f9;
+/* General Reset */
+* {
   margin: 0;
   padding: 0;
-  text-align: center;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f9;
   color: #333;
-}
-
-h1 {
-  color: #2d67f2;
-  font-size: 2.5em;
-  margin-top: 1em;
-}
-
-h2 {
-  color: #2d67f2;
-  margin-top: 1em;
-}
-
-.container {
+  text-align: center;
   padding: 2em;
-  max-width: 900px;
-  margin: auto;
 }
 
-/* === Buttons & Links === */
+/* Container Styling */
+.container {
+  max-width: 800px;
+  margin: auto;
+  animation: fadeIn 1s ease;
+}
+
+/* Headings */
+h1 {
+  font-size: 2.8rem;
+  color: #3366e8;
+  margin-bottom: 0.5em;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 1.5em;
+}
+
+/* Button Styling */
 .button-link {
   display: inline-block;
-  margin: 10px;
-  padding: 10px 20px;
-  text-decoration: none;
-  background-color: #0078D7;
+  margin: 1em;
+  padding: 1em 2em;
+  background-color: #3366e8;
   color: white;
-  border-radius: 8px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+  text-decoration: none;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .button-link:hover {
-  background-color: #005fa3;
+  background-color: #1f4fc1;
+  transform: translateY(-2px);
 }
 
-.restart {
-  margin-top: 1.5em;
-  padding: 0.6em 1.8em;
-  background-color: #0078D7;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  display: inline-block;
-  font-weight: bold;
+.button-link.small {
+  padding: 0.6em 1.5em;
+  font-size: 1rem;
 }
 
-.restart:hover {
-  background-color: #005fa3;
+/* Layout Grouping */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
 }
 
-.info-link {
-  display: inline-block;
-  margin-top: 1em;
-  color: #0078D7;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* === Memory Game Grid === */
+/* Game Grid (for memory game) */
 .memory-grid {
   display: grid;
   grid-template-columns: repeat(8, 80px);
-  grid-template-rows: repeat(4, 80px);
+  grid-gap: 10px;
   justify-content: center;
-  gap: 10px;
-  margin: 2em auto;
+  margin: 2em 0;
 }
 
 .card {
@@ -85,9 +82,9 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
   border-radius: 8px;
   user-select: none;
+  cursor: pointer;
   transition: transform 0.2s;
 }
 
@@ -103,39 +100,39 @@ h2 {
   background-color: #333;
 }
 
-/* === Status Bars === */
+/* Status */
 .status {
   margin-top: 1em;
   font-weight: bold;
   font-size: 1.2em;
 }
 
-/* === Leaderboard Styling === */
-.leaderboard {
-  background-color: #111;
-  color: white;
-  max-width: 600px;
-  margin: 20px auto;
-  border-radius: 10px;
-  padding: 1em;
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.leaderboard h2 {
-  color: #fff;
-}
-
+/* Table (Leaderboard) */
 table {
   width: 100%;
-  margin-top: 10px;
   border-collapse: collapse;
+  margin-top: 1em;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 th, td {
-  padding: 8px;
-  border-bottom: 1px solid #444;
+  padding: 0.75em 1em;
+  border-bottom: 1px solid #eee;
 }
 
-th {
-  color: #ffd700;
-  font-weight: bold;
+thead {
+  background-color: #3366e8;
+  color: white;
+}
+
+tr:last-child td {
+  border-bottom: none;
 }
