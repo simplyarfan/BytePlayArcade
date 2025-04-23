@@ -12,13 +12,11 @@
       padding: 0;
       text-align: center;
     }
-
     .memory-container {
       max-width: 900px;
       margin: 2em auto;
       animation: fadeIn 1s ease;
     }
-
     .memory-grid {
       display: grid;
       grid-template-columns: repeat(8, 80px);
@@ -26,7 +24,6 @@
       justify-content: center;
       gap: 10px;
     }
-
     .card {
       width: 80px;
       height: 80px;
@@ -41,25 +38,20 @@
       user-select: none;
       transition: transform 0.2s;
     }
-
     .card:hover {
       transform: scale(1.05);
     }
-
     .card.matched {
       background-color: #00b894;
     }
-
     .card.revealed {
       background-color: #333;
     }
-
     .status {
       margin-top: 1em;
       font-weight: bold;
       text-align: center;
     }
-
     .restart {
       margin-top: 1.5em;
       padding: 0.6em 1.8em;
@@ -68,15 +60,10 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
     }
-
     .restart:hover {
       background-color: #005fa3;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -187,23 +174,22 @@
         document.getElementById('status').textContent = `Score: ${score}`;
         resetTurn();
 
-      if (matchedCount === cards.length) {
+        if (matchedCount === cards.length) {
           winSound.play();
           clearInterval(timerInterval);
+
           localStorage.setItem("score", score);
           localStorage.setItem("time", time);
           localStorage.setItem("lastGame", "memory");
-          
-          // 👇 NEW LINE: calculate flips from score (optional) or track separately
+
           const flips = score === 0 ? 0 : (cards.length * 5 - score) / 10;
-          saveScoreToLeaderboard(flips, time);  // ✅ add this
-          
+          saveScoreToLeaderboard(flips, time);
+
           setTimeout(() => {
             window.location.href = "results.html";
           }, 1000);
-      }
-        
-      else {
+        }
+      } else {
         setTimeout(() => {
           firstCard.classList.remove('revealed');
           secondCard.classList.remove('revealed');
@@ -219,21 +205,20 @@
       lockBoard = false;
     }
 
-    let playerIndex = localStorage.getItem("playerIndex") || 0;
+    let playerIndex = parseInt(localStorage.getItem("playerIndex")) || 0;
 
     function saveScoreToLeaderboard(flips, time) {
       const playerName = `Player ${playerIndex}`;
       const newScore = { name: playerName, flips: flips, time: time };
-  
+
       let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
       leaderboard.push(newScore);
-  
-      // Sort by time, then flips
+
       leaderboard.sort((a, b) => a.time - b.time || a.flips - b.flips);
-      leaderboard = leaderboard.slice(0, 5); // Keep top 5
-  
+      leaderboard = leaderboard.slice(0, 5); // Top 5
+
       localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-  
+
       playerIndex++;
       localStorage.setItem("playerIndex", playerIndex);
     }
