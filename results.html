@@ -5,9 +5,10 @@
   <title>Game Over | BytePlay Arcade</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="fade-in">
+  <audio id="bgMusic" src="victory.mp3" autoplay loop hidden></audio>
   <div class="container">
-    <h1>🎉 Game Over!</h1>
+    <h1>🎉 Game Over! 🎊</h1>
     <p>Your final score: <strong id="scoreDisplay">0</strong></p>
     <p>Your time: <strong id="timeDisplay">0</strong></p>
 
@@ -25,6 +26,7 @@
       </table>
     </div>
 
+    <button class="restart" onclick="toggleMusic()">🔊 Toggle Music</button>
     <a href="memory-game.html" class="button-link">🔁 Replay Game</a>
     <a href="index.html" class="button-link">🏠 Home</a>
     <a href="games.html" class="button-link">🎮 Play Another Game</a>
@@ -52,6 +54,11 @@
         document.querySelector(".leaderboard").style.display = "none";
       }
     });
+
+    function toggleMusic() {
+      const music = document.getElementById("bgMusic");
+      music.muted = !music.muted;
+    }
 
     document.querySelectorAll('a[href]').forEach(link => {
       link.addEventListener('click', function (e) {
