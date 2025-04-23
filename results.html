@@ -1,92 +1,57 @@
-<!-- results.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Game Results | BytePlay Arcade</title>
+  <title>Game Over | BytePlay Arcade</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      text-align: center;
-      background-color: #f4f6f9;
-    }
-    .leaderboard {
-      margin: 2em auto;
-      padding: 1em;
-      background-color: #1c1c1c;
-      border-radius: 12px;
-      color: white;
-      max-width: 500px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-    }
-    th {
-      background-color: #333;
-    }
-    button, a.button-link {
-      margin: 1em;
-      padding: 0.5em 1.5em;
-      background-color: #0078D7;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
-  </style>
 </head>
 <body>
-  <h1>🎉 Game Over!</h1>
-  <p>Your final score: <strong id="scoreDisplay">0</strong></p>
-  <p>Your time: <strong id="timeDisplay">0</strong></p>
+  <div class="container">
+    <h1>🎉 Game Over!</h1>
+    <p>Your final score: <strong id="scoreDisplay">0</strong></p>
+    <p>Your time: <strong id="timeDisplay">0</strong></p>
 
-  <div class="leaderboard">
-    <h2>🏆 Leaderboard</h2>
-    <table>
-      <thead>
-        <tr><th>Player</th><th>Time (s)</th><th>Flips</th></tr>
-      </thead>
-      <tbody id="leaderboardBody"></tbody>
-    </table>
+    <div class="leaderboard">
+      <h2>🏆 Leaderboard</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Time (s)</th>
+            <th>Flips</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody"></tbody>
+      </table>
+    </div>
+
+    <a href="memory-game.html" class="button-link">🔁 Replay Game</a>
+    <a href="index.html" class="button-link">🏠 Home</a>
+    <a href="games.html" class="button-link">🎮 Play Another Game</a>
   </div>
 
-  <a href="memory-game.html" class="button-link">🔄 Replay Game</a>
-  <a href="index.html" class="button-link">🏠 Home</a>
-  <a href="games.html" class="button-link">🎮 Play Another Game</a>
-
   <script>
-    window.onload = function () {
+    document.addEventListener("DOMContentLoaded", () => {
       const score = localStorage.getItem("score") || 0;
       const time = localStorage.getItem("time") || 0;
       const lastGame = localStorage.getItem("lastGame");
-  
+
       document.getElementById("scoreDisplay").textContent = score;
       document.getElementById("timeDisplay").textContent = time;
-  
+
       if (lastGame === "memory") {
         const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
         const tbody = document.getElementById("leaderboardBody");
-  
+
         leaderboard.forEach(entry => {
           const row = document.createElement("tr");
           row.innerHTML = `<td>${entry.name}</td><td>${entry.time}</td><td>${entry.flips}</td>`;
           tbody.appendChild(row);
         });
       } else {
-        const leaderboardContainer = document.querySelector(".leaderboard");
-        if (leaderboardContainer) {
-          leaderboardContainer.style.display = "none";
-        }
+        document.querySelector(".leaderboard").style.display = "none";
       }
-    };
-</script>
+    });
+  </script>
 </body>
 </html>
