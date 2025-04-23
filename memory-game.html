@@ -1,10 +1,71 @@
-<!-- memory-game.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Memory Match | BytePlay Arcade</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .memory-container {
+      max-width: 900px;
+      margin: 2em auto;
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 80px);
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .card {
+      width: 80px;
+      height: 80px;
+      background-color: #0078D7;
+      color: white;
+      font-size: 1.8em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 8px;
+      user-select: none;
+    }
+
+    .card.matched {
+      background-color: #00b894;
+    }
+
+    .card.revealed {
+      background-color: #333;
+    }
+
+    .status {
+      margin-top: 1em;
+      font-weight: bold;
+    }
+
+    .restart {
+      margin-top: 1.5em;
+      padding: 0.6em 1.8em;
+      background-color: #0078D7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .restart:hover {
+      background-color: #005fa3;
+    }
+  </style>
 </head>
 <body>
   <div class="container memory-container">
@@ -37,10 +98,6 @@
     let matchedCount = 0;
     let time = 0;
     let timerInterval;
-
-    const flipSound = document.getElementById('flipSound');
-    const matchSound = document.getElementById('matchSound');
-    const winSound = document.getElementById('winSound');
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -87,13 +144,12 @@
 
     function handleCardClick(e) {
       const card = e.target;
-
       if (lockBoard || card.classList.contains('matched') || card === firstCard) return;
 
       flipCount++;
       card.classList.add('revealed');
       card.textContent = card.dataset.value;
-      flipSound.play();
+      document.getElementById("flipSound").play();
 
       if (!firstCard) {
         firstCard = card;
@@ -108,12 +164,12 @@
         secondCard.classList.add('matched');
         score += 10;
         matchedCount += 2;
-        matchSound.play();
+        document.getElementById("matchSound").play();
         document.getElementById('status').textContent = `Score: ${score}`;
         resetTurn();
 
         if (matchedCount === cards.length) {
-          winSound.play();
+          document.getElementById("winSound").play();
           clearInterval(timerInterval);
           saveScoreToLeaderboard(flipCount, time);
           setTimeout(() => {
