@@ -130,6 +130,32 @@ body.fade-in {
   }
 }
 
+/* Homepage animation */
+@keyframes slideUpFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide {
+  animation: slideUpFadeIn 0.8s ease-out forwards;
+  opacity: 0; /* Start invisible */
+}
+
+.animate-delay-1 {
+  animation-delay: 0.3s;
+}
+.animate-delay-2 {
+  animation-delay: 0.5s;
+}
+.animate-delay-3 {
+  animation-delay: 0.7s;
+}
 
 /* Table (Leaderboard) */
 table {
