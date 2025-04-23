@@ -6,7 +6,7 @@
   <title>BytePlay Arcade</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="fade-in">
   <div class="container">
     <h1>🎮 Welcome to BytePlay Arcade</h1>
     <p class="subtitle">Select a game to play:</p>
@@ -18,5 +18,22 @@
 
     <a href="instructions.html" class="button-link small">📖 View Game Instructions</a>
   </div>
+
+  <script>
+    document.body.classList.add('fade-in');
+    document.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href && !href.startsWith('#') && !this.target) {
+          e.preventDefault();
+          document.body.classList.remove('fade-in');
+          document.body.classList.add('fade-out');
+          setTimeout(() => {
+            window.location.href = href;
+          }, 400);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
