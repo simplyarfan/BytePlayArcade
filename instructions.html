@@ -2,66 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>How to Play | BytePlay Arcade</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .container {
-      max-width: 800px;
-      margin: 3em auto;
-      padding: 2em;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-    }
-
-    h1 {
-      text-align: center;
-      color: #0078d7;
-      margin-bottom: 1em;
-    }
-
-    h2 {
-      color: #333;
-      border-bottom: 2px solid #0078d7;
-      padding-bottom: 0.3em;
-      margin-top: 2em;
-    }
-
-    p {
-      font-size: 1.1em;
-      line-height: 1.6;
-    }
-
-    .home-link {
-      display: block;
-      text-align: center;
-      margin-top: 2em;
-      font-weight: bold;
-      color: #0078d7;
-      text-decoration: none;
-    }
-
-    .home-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instructions | BytePlay Arcade</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="fade-in">
   <div class="container">
-    <h1>📘 Game Instructions</h1>
+    <h1>📖 Game Instructions</h1>
+    <p class="subtitle">Here's how to play each game:</p>
 
-    <h2>🎮 Tic Tac Toe</h2>
-    <p>
-      Tic Tac Toe is a two-player game played on a 3x3 grid. One player uses <strong>1</strong>, the other uses <strong>0</strong>. Players take turns placing their symbol in empty squares. The first player to get three of their marks in a horizontal, vertical, or diagonal row wins the game. If all 9 squares are filled without a winner, the game ends in a draw.
-    </p>
+    <h2>Tic Tac Toe</h2>
+    <p>Take turns placing 1s and 0s on a 3x3 grid. The first player to align three of their numbers horizontally, vertically, or diagonally wins!</p>
 
-    <h2>🧠 Memory Match</h2>
-    <p>
-      The Memory Match game begins with a grid of face-down emoji cards. Click to flip two cards at a time. If they match, they stay visible. If they don’t, they flip back. The goal is to match all emoji pairs in the shortest time and with the fewest mismatches. Your score increases for every match you make. A timer tracks your performance!
-    </p>
+    <h2>Memory Match</h2>
+    <p>Flip cards to find matching emoji pairs. Try to complete the game in the least amount of time and flips. The leaderboard tracks the top 5 scores!</p>
 
-    <a class="home-link" href="index.html">🔙 Return to Home</a>
+    <a href="index.html" class="button-link">🏠 Back to Home</a>
   </div>
+
+  <script>
+    document.body.classList.add('fade-in');
+    document.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href && !href.startsWith('#') && !this.target) {
+          e.preventDefault();
+          document.body.classList.remove('fade-in');
+          document.body.classList.add('fade-out');
+          setTimeout(() => {
+            window.location.href = href;
+          }, 400);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
